@@ -1,6 +1,5 @@
 :- dynamic word/1.
 
-%Fatos
 word(bola).
 word(ouro).
 word(carro).
