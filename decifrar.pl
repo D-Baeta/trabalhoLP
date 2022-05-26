@@ -1,0 +1,1 @@
+% decifrar: Pega um texto crifrado e volta com ele sem saber a chave

@@ -1,0 +1,1 @@
+%Retornar os predicados code e string2code
