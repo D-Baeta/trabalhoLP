@@ -1,4 +1,3 @@
-
 code(' ',0).
 code(a,1).
 code(b,2).
