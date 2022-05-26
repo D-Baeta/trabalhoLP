@@ -2,6 +2,8 @@
 
 :- use_module(library(clpfd)).
 :- consult('baseDePalavras.pl').
+:- consult('words.pl').
+:- consult('alphabet.pl').
 
 cesar(Chave,Mensagem,Cifra) :-
     (   (string(Mensagem); atom(Mensagem)) ->
@@ -22,6 +24,3 @@ cifra_cesar(Chave,X,Y) :-
     C1 #= Chave mod 27,
     Y #= (X+C1) mod 27.
 
-
-
-    
