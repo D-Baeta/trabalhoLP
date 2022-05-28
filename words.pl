@@ -1,6 +1,7 @@
 :- dynamic word/1.
 
 word(bola).
+word(lua).
 word(ouro).
 word(carro).
 word(azul).
