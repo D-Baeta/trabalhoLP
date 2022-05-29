@@ -1,6 +1,7 @@
 :- use_module(library(clpfd)).
 :- consult('words.pl').
 :- consult('alphabet.pl').
+:- consult('codificar.pl').
 
 /*
 * É verdadeiro se a string for convertida no respectivo valor inteiro.
