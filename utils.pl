@@ -26,21 +26,40 @@ string2code(String, Code) :-
 /*
 * É verdadeiro se uma nova palavra for adicionada ao conjunto de palavras (words.pl).
 *
-* @param Word - Palavra a ser adicionada
+* @param Word - Palavra a ser adicionada. Deve ser um atom
 * @return - true se a inserção for verdadeira
 */
 add_word(Word) :-
   (
-    word(Word) ->
+    (word(Word); string(Word)) ->
       fail
       ;
       assertz(word(Word)),
-      append('words.pl'),
-      write(word(Word)), 
-      write('.'),
-      nl,
-      told
+      open('words.pl', write, Stream),
+      forall(word(X), write_word(Stream, X)),
+      close(Stream)
     ).
+/*
+* É verdadeiro se a palavra for removida do conjunto de palavras (words.pl).
+*
+* @param Word - Palavra a ser removida, deve ser um atom.
+* @return - true se a remoção for verdadeira
+*/
+remove_word(Word) :-
+  (
+    (word(Word), atom(Word)) ->
+      retract(word(Word)),
+      open('words.pl', write, Stream),
+      forall(word(X), write_word(Stream, X)),
+      close(Stream)
+      ;
+      fail
+    ).  
+
+write_word(Stream, Word) :-
+  write(Stream, word(Word)),
+  write(Stream, ".\n").
+
 
 /*
 * É verdadeiro se o total de palavras for igual ao total de palavras do arquivo words.pl.
