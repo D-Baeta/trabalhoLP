@@ -277,33 +277,6 @@ slice([_|Xs],I,K,Ys) :- I > 1,
 
 
 /*
-* um predicado que relaciona uma mensagem cifrada, 
-* um tamanho de chave e uma palavra que ocorre no texto
-* com a mensagem decifrada;
-*/
-decript_vigenere_one_word(Message,Key_Length,Known_Word,Decripted_Message) :-
-  string2code(Known_Word,P1),
-  slice(P1,1,Key_Length,P2),
-  string2code(Message, M1),
-  length(M1, L1),
-  goes_through_list([_|M1],L1,P2,Key_Length,[],W),
-  writef('%t\n',[W]),
-  maplist(text_to_string,W,WString),
-  writef('%t\n',[WString]),
-  maplist(string2code,WString,WChars),
-  writef('%t\n',[WChars]),
-  maplist(func,WChars,Permutation),
-  flatten(Permutation,Decripted_Flatten_List),
-  maplist(de_vigenere(Message),Decripted_Flatten_List,Possible_Decripted_Messages),
-  writef('%t\n',[Possible_Decripted_Messages]),
-  include(is_sentence, Possible_Decripted_Messages, Decripted_Message_List),
-  writef('%t\n',[Decripted_Message_List]),
-  sort(Decripted_Message_List,Decripted_Message_Sorted_List),
-  atomics_to_string(Decripted_Message_Sorted_List," ",Decripted_Message),
-  !.
-
-
-/*
 * Se a String é uma frase formada pelas palavras do predicado word
 */
 is_sentence(Possible_String_Message) :-
