@@ -4,7 +4,7 @@
 */
 
 cesar(Message,Key,Cipher) :-
-  (   (is_string_or_atom(Message)) ->
+  (   (is_string_or_atom(Message))->
     string2code(Message,M1),
     maplist(calculate_offset(Key), M1, Cipher_List),
     string2code(Cipher,Cipher_List)

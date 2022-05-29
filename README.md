@@ -2,7 +2,12 @@ Alunos:
     Daniel Augusto Machado Baeta - 201965122C
     Thiago do Vale Cabral - 201965220AC
 
-Codificação e Base de Dados:
+# Instrução
+
+Para iniciar programa: swipl -s index.pl
+
+
+# Codificação e Base de Dados:
 
     word(X) :- Retorna verdadeirio se X estiver na base de palavras.
 
@@ -10,7 +15,7 @@ Codificação e Base de Dados:
 
     string2Code(S, L) :- Relaciona uma String com uma Lista de códigos de seus caracteres.
 
-Cifrando e Decifrando Mensagens
+# Cifrando e Decifrando Mensagens
 
     cesar(Message,Key,Cipher) :- codifica/decodifica pela cifra de cesar uma mensagem dada uma chave.
 

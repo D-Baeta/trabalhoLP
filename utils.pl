@@ -159,8 +159,6 @@ my_last(X,[X]).
 my_last(X,[_|L]) :- my_last(X,L).
 
 
-
-
 /*
 * É verdadeiro se K conter as possíveis chaves baseada na ordem das letras mais frequentes da lingua portuguesa.
 *
@@ -206,8 +204,6 @@ split_message(P, Splited) :-
   split_string(P," ", ":,.\n\t\s",Splited_String),
   maplist(atom_string(), Splited, Splited_String).
 
-
-
 /*
 * Junta as duas strings em uma lista de pares
 * Ex: "abcde","ghi" --> [a,b,c,d,e],[g,h,i] --> [a-g,b-h,c-i,d-g,e-h]
@@ -223,9 +219,8 @@ pairing_lists(Message,Message_Keys,Pair_List) :-
   stretchfy(M2, L1, M2_Normalized),
   pairs_keys_values(Pair_List,M1,M2_Normalized).
 
-
 /*
-* predicado que relaciona uma mensagem cifrada, um tamanho de chave, 
+* predicado que relaciona uma mensagem cifrada por vigenere, um tamanho de chave, 
 * uma palavra que sabidamente ocorre na mensagem decifrada e sua posicao,
 * com a chave.
 */
@@ -243,7 +238,6 @@ find_key(Message,Key_Length,Decripted_Word,Initial_Pos,Key) :-
   sort(Chave_List,Chave_List_Sorted),
   atomics_to_string(Chave_List_Sorted," ",Key),
   !.
-
 
 /*
 * Aplica do String2code ao contrário.
@@ -319,12 +313,6 @@ is_sentence(Possible_String_Message) :-
   is_valid(Possible_List_Message).
 
 /*
-* Aplica a vinegere inversamente.
-*/
-de_vigenere(Cipher,Key,Message) :-
-  vigenere(Message,Key,Cipher).
-
-/*
 * Aplica a permutação nas possiveis cifras, pois ela pode estar em qualquer ordem.
 * Retorna as possibilidades que corresponderem a uma palafra contida no predicado word.
 */
@@ -360,12 +348,3 @@ goes_through_list([],_,_,_,Possible_Key_List,Possible_Key_List).
 * Inserse Elemento no inicio de uma lista.
 */
 insert_element_list(List,Element,[Element|List]).
-
-/*
-* Utiliza o terceito predicado para passar como paramentro uma lista de possiveis palavras.
-*/
-decript_vigenere_multiple_words(Message,Possible_Words_List,Key_Length,Decripted_Message) :-
-  maplist(terceiroPred(Message,Key_Length),Possible_Words_List,Decripted_Message_List),
-  sort(Decripted_Message_List,Unic_Decripted_Message),
-  atomics_to_string(Unic_Decripted_Message,"",Decripted_Message),
-  !.
