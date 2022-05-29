@@ -49,7 +49,6 @@ word(cem).
 word(mil).
 word(a).
 word(o).
-word(um).
 word(uma).
 word(de).
 word(em).
@@ -148,3 +147,18 @@ word(igual).
 word(fino).
 word(impossivel).
 word(pobre).
+word(predicado).
+word(relaciona).
+word(mensagem).
+word(cifrada).
+word(lista).
+word(possiveis).
+word(palavras).
+word(ocorrem).
+word(no).
+word(na).
+word(texto).
+word(tamanho).
+word(chave).
+word(decifrada).
+word(' ').

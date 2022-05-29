@@ -119,14 +119,14 @@ calculate_offset(Offset,Entry,Output) :-
 * @param Letter - Letra mais encontrada na Mensagem
 * @return - true se encontrar a Letra que mais aparece na mensagem
 */
-findMostFreqLetter(Message,Letter) :-
-  string_chars(Message,MsgChars),
-  sort(MsgChars,Sorted),
-  maplist(count(MsgChars),Sorted,Freq),
-  pairs_keys_values(Pairs,Freq,Sorted),
-  keysort(Pairs, SortedByKey),
-  pairs_values(SortedByKey, JustValues),
-  my_last(Letter,JustValues).
+find_most_freq_letter(Message,Letter) :-
+  string_chars(Message,Msg_Chars),
+  sort(Msg_Chars,Msg_Chars_Sorted),
+  maplist(count(Msg_Chars),Msg_Chars_Sorted,Freq),
+  pairs_keys_values(Pairs,Freq,Msg_Chars_Sorted),
+  keysort(Pairs, Sorted_By_Key),
+  pairs_values(Sorted_By_Key, Just_Values),
+  my_last(Letter,Just_Values).
 
 
 /*
@@ -165,10 +165,10 @@ my_last(X,[_|L]) :- my_last(X,L).
 * @param K - Lista de possiveis chaves.
 * @return - 
 */
-getPotencialKeys(L,K) :-
+get_potencial_keys(L,K) :-
   code(L, Code),
-  maplist(code(), [' ',a,e,o,s,r,i,n,d,m,u,t,c,l,p,v,g,h,q,b,f,z,j,x,k,w,y], FreqCode),
-  maplist(sub(Code),FreqCode,K).
+  maplist(code(), [' ',a,e,o,s,r,i,n,d,m,u,t,c,l,p,v,g,h,q,b,f,z,j,x,k,w,y], Freq_Code),
+  maplist(sub(Code),Freq_Code,K).
 
 
 /*
@@ -188,7 +188,7 @@ sub(Code, Element, Key) :-
 * @param Pds - Palavra decifrada.
 * @return - true se Pds estiver no predicado word
 */
-isValid(Pds) :-
+is_valid(Pds) :-
   maplist(word,Pds).
 
 
@@ -199,11 +199,9 @@ isValid(Pds) :-
 * @param Splited - atom
 * @return -
 */
-splitMessage(P, Splited) :-
-  split_string(P," ", "",SplitedString),
-  maplist(atom_string(), Splited, SplitedString).
-
-
+split_message(P, Splited) :-
+  split_string(P," ", "",Splited_String),
+  maplist(atom_string(), Splited, Splited_String).
 
 
 
@@ -215,12 +213,12 @@ splitMessage(P, Splited) :-
 * @param Mensagem_Chave - String
 * @return -
 */
-pairingLists(Mensagem,Mensagem_Chave,ListaPares) :-
-  string_chars(Mensagem, M1),
-  string_chars(Mensagem_Chave, M2),
+pairing_lists(Message,Message_Keys,Pair_List) :-
+  string_chars(Message, M1),
+  string_chars(Message_Keys, M2),
   length(M1, L1),
-  stretchfy(M2, L1, M2_Normalizado),
-  pairs_keys_values(ListaPares,M1,M2_Normalizado).
+  stretchfy(M2, L1, M2_Normalized),
+  pairs_keys_values(Pair_List,M1,M2_Normalized).
 
 
 /*
@@ -228,29 +226,30 @@ pairingLists(Mensagem,Mensagem_Chave,ListaPares) :-
 * uma palavra que sabidamente ocorre na mensagem decifrada e sua posicao,
 * com a chave.
 */
-achave(Mensagem,TamChave,PalavraDecifrada,PosicaoI,Chave) :-
-  string2code(Mensagem, M1),
-  PosicaoF #= PosicaoI + TamChave-1,
-  slice(M1,PosicaoI,PosicaoF,L),
-  string2code(PalavraDecifrada,P1),
-  slice(P1,1,TamChave,P2),
-  maplist(subMod(),P2,L,PossivelChave),
-  findall(Perm, perm(PossivelChave,Perm),Ps),
-  maplist(backString2code(),Ps,PotencialKeySplited),
-  maplist(atom_string(), AtomKey, PotencialKeySplited),
-  include(word, AtomKey, ChaveList),
-  atomics_to_string(ChaveList," ",Chave),
+find_key(Message,Key_Length,Decripted_Word,Initial_Pos,Key) :-
+  string2code(Message, M1),
+  Final_Pos #= Initial_Pos + Key_Length-1,
+  slice(M1,Initial_Pos,Final_Pos,Sliced),
+  string2code(Decripted_Word,W1),
+  slice(W1,1,Key_Length,W2),
+  maplist(subMod(),W2,Sliced,Possible_Key),
+  findall(Perm, perm(Possible_Key,Perm),Ps),
+  maplist(backString2code(),Ps,Potencial_Key_Splited),
+  maplist(atom_string(), Atom_Key, Potencial_Key_Splited),
+  include(word, Atom_Key, Chave_List),
+  sort(Chave_List,Chave_List_Sorted),
+  atomics_to_string(Chave_List_Sorted," ",Key),
   !.
 
 
 /*
 * Aplica do String2code ao contrário.
 */
-backString2code(Permutation,PossibleKey) :-
-  string2code(PossibleKey,Permutation).
+backString2code(Permutation,Possible_Key) :-
+  string2code(Possible_Key,Permutation).
 
 /*
-* Faz a permutação, não sei como.
+* Faz a permutação
 */
 takeout(X,[X|R],R).  
 takeout(X,[F |R],[F|S]) :- takeout(X,R,S).
@@ -284,34 +283,35 @@ slice([_|Xs],I,K,Ys) :- I > 1,
 * um tamanho de chave e uma palavra que ocorre no texto
 * com a mensagem decifrada;
 */
-terceiroPred(Mensagem,TamChave,Palavra,MensagemDecifrada) :-
-  string2code(Palavra,P1),
-  slice(P1,1,TamChave,P2),
-  string2code(Mensagem, M1),
-
-  teste([_|M1],P2,TamChave,[],W),
+decript_vigenere_one_word(Message,Key_Length,Known_Word,Decripted_Message) :-
+  string2code(Known_Word,P1),
+  slice(P1,1,Key_Length,P2),
+  string2code(Message, M1),
+  length(M1, L1),
+  goes_through_list([_|M1],L1,P2,Key_Length,[],W),
   maplist(text_to_string,W,WString),
   maplist(string2code,WString,WChars),
   maplist(func,WChars,Permutation),
-  flatten(Permutation,DecriptedFlattenList),
-  maplist(deVigenere(Mensagem),DecriptedFlattenList,PossibleDecriptedMessages),
-  include(isSentence, PossibleDecriptedMessages, MensagemDecifradaList),
-  atomics_to_string(MensagemDecifradaList," ",MensagemDecifrada),
+  flatten(Permutation,Decripted_Flatten_List),
+  maplist(de_vigenere(Message),Decripted_Flatten_List,Possible_Decripted_Messages),
+  include(is_sentence, Possible_Decripted_Messages, Decripted_Message_List),
+  sort(Decripted_Message_List,Decripted_Message_Sorted_List),
+  atomics_to_string(Decripted_Message_Sorted_List," ",Decripted_Message),
   !.
 
 
 /*
 * Se a String é uma frase formada pelas palavras do predicado word
 */
-isSentence(PossibleStringMessage) :-
-  splitMessage(PossibleStringMessage,PossibleListMessage),
-  isValid(PossibleListMessage).
+is_sentence(Possible_String_Message) :-
+  split_message(Possible_String_Message,Possible_List_Message),
+  is_valid(Possible_List_Message).
 
 /*
 * Aplica a vinegere inversamente.
 */
-deVigenere(Cifra,Key,Mensagem) :-
-  vigenere(Mensagem,Key,Cifra).
+de_vigenere(Cipher,Key,Message) :-
+  vigenere(Message,Key,Cipher).
 
 /*
 * Aplica a permutação nas possiveis cifras, pois ela pode estar em qualquer ordem.
@@ -319,34 +319,42 @@ deVigenere(Cifra,Key,Mensagem) :-
 */
 func(W,P) :-
   findall(Perm, perm(W,Perm),Pe),
-  maplist(backString2code(),Pe,PotencialKeySplited),
-  maplist(atom_string(), AtomKey, PotencialKeySplited),
-  include(word, AtomKey, P).
+  maplist(backString2code(),Pe,Potencial_Key_Splited),
+  maplist(atom_string(), Atom_Key, Potencial_Key_Splited),
+  include(word, Atom_Key, P).
 
 /*
 * Percorre a lista de acordo com o tamanho da chave.
 * Cada pedaço é transformado a partir da palavra decifrada conhecida.
 * Retorna uma lista com as possiveis cifras.
 */
-teste([_|Y],Z,T,L,W) :- 
-  slice(Y,1,T,Y2),
-  maplist(subMod, Z, Y2, Cifra_Lista),
-  string2code(CifraStr, Cifra_Lista),
-  atom_string(AtomKey, CifraStr),
-  insere(L,AtomKey,L1),
-  teste(Y,Z,T,L1,W).
-teste([_,_,_],_,_,W,W).
+goes_through_list([_|Encripted_Code_List],Encripted_Code_List_Length,Known_Word_Slice,Key_Length,Aux_List,Possible_Key_List) :-
+  (
+    (Encripted_Code_List_Length =:= Key_Length),
+    goes_through_list([],_,_,_,Aux_List,Possible_Key_List)
+  )
+  ;
+  (
+    slice(Encripted_Code_List,1,Key_Length,Y2),
+    maplist(subMod, Known_Word_Slice, Y2, Cifra_Lista),
+    string2code(CifraStr, Cifra_Lista),
+    atom_string(AtomKey, CifraStr),
+    insert_element_list(Aux_List,AtomKey,L1),
+    length(Encripted_Code_List, LY2),
+    goes_through_list(Encripted_Code_List,LY2,Known_Word_Slice,Key_Length,L1,Possible_Key_List)
+  ).
+goes_through_list([],_,_,_,Possible_Key_List,Possible_Key_List).
 
 /*
 * Inserse Elemento no inicio de uma lista.
 */
-insere(Lista,Elemento,[Elemento|Lista]).
+insert_element_list(List,Element,[Element|List]).
 
 /*
 * Utiliza o terceito predicado para passar como paramentro uma lista de possiveis palavras.
 */
-quartoPred(Mensagem,ListaPossiveisPalavras,TamChave,MensagemDecifrada) :-
-  maplist(terceiroPred(Mensagem,TamChave),ListaPossiveisPalavras,MensagemDecifradaLista),
-  sort(MensagemDecifradaLista,MensagemDecifradaListaUnica),
-  atomics_to_string(MensagemDecifradaListaUnica,"",MensagemDecifrada),
+decript_vigenere_multiple_words(Message,Possible_Words_List,Key_Length,Decripted_Message) :-
+  maplist(terceiroPred(Message,Key_Length),Possible_Words_List,Decripted_Message_List),
+  sort(Decripted_Message_List,Unic_Decripted_Message),
+  atomics_to_string(Unic_Decripted_Message,"",Decripted_Message),
   !.
