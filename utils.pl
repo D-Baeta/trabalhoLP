@@ -30,12 +30,17 @@ string2code(String, Code) :-
 * @return - true se a inserção for verdadeira
 */
 add_word(Word) :-
-  assertz(word(Word)),
-  append('words.pl'),
-  write(word(Word)), 
-  write('.'),
-  nl,
-  told.
+  (
+    word(Word) ->
+      fail
+      ;
+      assertz(word(Word)),
+      append('words.pl'),
+      write(word(Word)), 
+      write('.'),
+      nl,
+      told
+    ).
 
 /*
 * É verdadeiro se o total de palavras for igual ao total de palavras do arquivo words.pl.
