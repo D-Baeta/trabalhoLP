@@ -1,3 +1,8 @@
+/*
+* Daniel Augusto Machado Baeta - 201965122C
+* Thiago do Vale Cabral - 201965220AC
+*/
+
 :- dynamic word/1.
 
 word(bola).
@@ -161,4 +166,3 @@ word(texto).
 word(tamanho).
 word(chave).
 word(decifrada).
-word(' ').

@@ -1,6 +1,9 @@
+/*
+* Daniel Augusto Machado Baeta - 201965122C
+* Thiago do Vale Cabral - 201965220AC
+*/
+
 :- use_module(library(clpfd)).
-:- consult('words.pl').
-:- consult('alphabet.pl').
 
 /*
 * É verdadeiro se a string for convertida no respectivo valor inteiro.
@@ -200,7 +203,7 @@ is_valid(Pds) :-
 * @return -
 */
 split_message(P, Splited) :-
-  split_string(P," ", "",Splited_String),
+  split_string(P," ", ":,.\n\t\s",Splited_String),
   maplist(atom_string(), Splited, Splited_String).
 
 
@@ -262,7 +265,8 @@ perm([],[]).
 * Aplica a chave inversamente.
 */
 subMod(M, C, K) :-
-  K #= (C - M) mod 27.
+  count_codes(Total_Codes),
+  K #= (C - M) mod Total_Codes.
 
 /*
 * Recorta uma Lista.
@@ -289,12 +293,17 @@ decript_vigenere_one_word(Message,Key_Length,Known_Word,Decripted_Message) :-
   string2code(Message, M1),
   length(M1, L1),
   goes_through_list([_|M1],L1,P2,Key_Length,[],W),
+  writef('%t\n',[W]),
   maplist(text_to_string,W,WString),
+  writef('%t\n',[WString]),
   maplist(string2code,WString,WChars),
+  writef('%t\n',[WChars]),
   maplist(func,WChars,Permutation),
   flatten(Permutation,Decripted_Flatten_List),
   maplist(de_vigenere(Message),Decripted_Flatten_List,Possible_Decripted_Messages),
+  writef('%t\n',[Possible_Decripted_Messages]),
   include(is_sentence, Possible_Decripted_Messages, Decripted_Message_List),
+  writef('%t\n',[Decripted_Message_List]),
   sort(Decripted_Message_List,Decripted_Message_Sorted_List),
   atomics_to_string(Decripted_Message_Sorted_List," ",Decripted_Message),
   !.
@@ -304,7 +313,9 @@ decript_vigenere_one_word(Message,Key_Length,Known_Word,Decripted_Message) :-
 * Se a String é uma frase formada pelas palavras do predicado word
 */
 is_sentence(Possible_String_Message) :-
+  writef('%t\n',[Possible_String_Message]),
   split_message(Possible_String_Message,Possible_List_Message),
+  writef('%t\n',[Possible_List_Message]),
   is_valid(Possible_List_Message).
 
 /*

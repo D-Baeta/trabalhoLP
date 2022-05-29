@@ -1,30 +1,30 @@
-# trabalhoLP
+Alunos:
+    Daniel Augusto Machado Baeta - 201965122C
+    Thiago do Vale Cabral - 201965220AC
 
-Codificar/decodificar uma mensagem atraves da cifra de cesar:
+Codificação e Base de Dados:
 
-    cesar(Mensagem,Chave,Cifra).
+    word(X) :- Retorna verdadeirio se X estiver na base de palavras.
 
-Decifrar uma mensagem cifrada por cesar sem a chave:
+    code(Char, Code) :- Relaciona um caractere à um número.
 
-    deCesar(Message,Decripted).
+    string2Code(S, L) :- Relaciona uma String com uma Lista de códigos de seus caracteres.
 
-Codificar/decodificar uma mensagem atraves da cifra de vigenere:
+Cifrando e Decifrando Mensagens
 
-    vigenere(Mensagem, Mensagem_Chave, Cifra).
+    cesar(Message,Key,Cipher) :- codifica/decodifica pela cifra de cesar uma mensagem dada uma chave.
 
-Para uma mensagem cifrada por vigenere temos os seguintes predicaods:
+    vigenere(Message, Message_Key, Cipher) :- codifica/decodifica pela cifra de vigenere uma mensagem dada uma chave.
 
-    Parear duas Strings:
-        pairingLists(Mensagem,Mensagem_Chave,ListaPares).
+    decript_cesar(Message,Decripted) :- decifra uma mensagem criptografada pela cifra de cesar.
 
-    Encontrar a chave sabendo a Mensagem cifrada, Tamanho da Chave, Uma palavra decifrada e sua posição:
-        achave(Mensagem,TamChave,PalavraDecifrada,PosicaoI,Chave)
+    pairing_lists(Message,Message_Keys,Pair_List) :- Parear duas Strings.
 
-    Decifrar a mensagem sabendo, a Mensagem cifrada, Tamanho da Chave, uma Palavra contida na mensagem:
-        terceiroPred(Mensagem,TamChave,Palavra,MensagemDecifrada)
+    find_key(Message,Key_Length,Decripted_Word,Initial_Pos,Key) :- Encontrar a chave sabendo a Mensagem cifrada, Tamanho da Chave, Uma palavra decifrada e sua posição.
 
-    Decifrar a mensagem sabendo, a Mensagem cifrada, Tamanho da Chave, uma Lista de Palavras contidas, ou não, na mensagem:
-        quartoPred(Mensagem,ListaPossiveisPalavras,TamChave,MensagemDecifrada)
+    decript_vigenere_one_word(Message,Key_Length,Known_Word,Decripted_Message) :- Decifrar a mensagem sabendo, a Mensagem cifrada, Tamanho da Chave, uma Palavra contida na mensagem.
+
+    decript_vigenere_multiple_words(Message,Possible_Words_List,Key_Length,Decripted_Message) :-  Decifrar a mensagem sabendo, a Mensagem cifrada, Tamanho da Chave, uma Lista de Palavras contidas, ou não, na mensage.
 
 
 "um predicado que relaciona uma mensagem cifrada uma lista de possiveis palavras que ocorrem no texto e um tamanho de chave com a mensagem decifrada"

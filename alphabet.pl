@@ -1,3 +1,8 @@
+/*
+* Daniel Augusto Machado Baeta - 201965122C
+* Thiago do Vale Cabral - 201965220AC
+*/
+
 code(' ',0).
 code(a,1).
 code(b,2).
@@ -25,3 +30,6 @@ code(w,23).
 code(x,24).
 code(y,25).
 code(z,26).
+code(',',27).
+code('.',28).
+code(':',29).
